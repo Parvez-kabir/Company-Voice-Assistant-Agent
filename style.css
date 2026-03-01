@@ -1,0 +1,82 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: #000;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: -apple-system, sans-serif;
+}
+
+.phone-frame {
+    width: 375px;
+    height: 780px;
+    background: #1c1c1e;
+    border-radius: 50px;
+    padding: 10px;
+    border: 6px solid #3a3a3c;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    position: relative;
+}
+
+.screen {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #1c2c3e 0%, #000 100%);
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Status Bar */
+.status-bar { padding: 15px 25px; display: flex; justify-content: space-between; color: white; font-size: 14px; align-items: center; }
+.dynamic-island { width: 100px; height: 26px; background: black; border-radius: 20px; }
+
+/* Avatar & BA Text FIX */
+.caller-header { text-align: center; margin-top: 30px; color: white; }
+.avatar-wrapper { position: relative; width: 100px; height: 100px; margin: 0 auto 15px; }
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    background: #ef4444; /* লাল রং */
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    font-weight: bold;
+    position: relative;
+    z-index: 2;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.pulse-ring {
+    position: absolute; width: 100%; height: 100%; background: #ef4444; border-radius: 50%;
+    animation: pulse 2s infinite; opacity: 0.5; display: none;
+}
+@keyframes pulse { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(1.7); opacity: 0; } }
+
+/* Conversation Glass Box */
+.conversation-area { padding: 10px 25px; flex-grow: 1; }
+.caption-glass-box {
+    background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(20px);
+    border-radius: 20px; padding: 15px; color: white; font-size: 13px;
+    border: 1px solid rgba(255,255,255,0.1); min-height: 100px;
+}
+
+/* Interaction Area */
+.interaction-area { padding-bottom: 40px; display: flex; flex-direction: column; align-items: center; }
+.controls-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px 40px; width: 100%; }
+.grid-item { display: flex; flex-direction: column; align-items: center; color: white; font-size: 11px; }
+.icon-circle { width: 60px; height: 60px; background: rgba(255,255,255,0.12); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; margin-bottom: 8px; }
+
+/* Call/End Button */
+.action-container { margin-top: 15px; display: flex; flex-direction: column; align-items: center; }
+.call-btn { width: 75px; height: 75px; border-radius: 50%; border: none; color: white; font-size: 30px; cursor: pointer; transition: all 0.3s; }
+.start-state { background: #34c759; box-shadow: 0 5px 15px rgba(52, 199, 89, 0.4); }
+.end-state { background: #ff3b30; box-shadow: 0 5px 15px rgba(255, 59, 48, 0.4); }
+#actionLabel { color: white; font-size: 12px; margin-top: 8px; }

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Betopia Assistant Pro</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="screen">
+            <div class="status-bar">
+                <span class="time">9:41</span>
+                <div class="dynamic-island"></div>
+                <div class="status-icons">
+                    <i class="fas fa-signal"></i>
+                    <i class="fas fa-wifi"></i>
+                    <i class="fas fa-battery-full"></i>
+                </div>
+            </div>
+
+            <div class="caller-header">
+                <div class="avatar-wrapper">
+                    <div class="pulse-ring" id="pulseRing"></div>
+                    <div class="avatar">BA</div>
+                </div>
+                <h1>Betopia Assistant</h1>
+                <p id="status">Ready to Call</p>
+            </div>
+
+            <div class="conversation-area">
+                <div class="caption-glass-box">
+                    <p><strong>You:</strong> <span id="userText">...</span></p>
+                    <p><strong>AI:</strong> <span id="aiText">Press start to talk.</span></p>
+                </div>
+            </div>
+
+            <div class="interaction-area">
+                <div class="controls-grid">
+                    <div class="grid-item">
+                        <div class="icon-circle"><i class="fas fa-microphone"></i></div>
+                        <span>mute</span>
+                    </div>
+                    <div class="grid-item">
+                        <div class="icon-circle"><i class="fas fa-th"></i></div>
+                        <span>keypad</span>
+                    </div>
+                    <div class="grid-item">
+                        <div class="icon-circle"><i class="fas fa-volume-high"></i></div>
+                        <span>speaker</span>
+                    </div>
+                </div>
+
+                <div class="action-container">
+                    <button id="mainActionBtn" class="call-btn start-state">
+                        <i class="fas fa-phone" id="actionIcon"></i>
+                    </button>
+                    <span id="actionLabel">Start Call</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('mainActionBtn');
+        const icon = document.getElementById('actionIcon');
+        const label = document.getElementById('actionLabel');
+        const status = document.getElementById('status');
+        const pulse = document.getElementById('pulseRing');
+        const userText = document.getElementById('userText');
+        const aiText = document.getElementById('aiText');
+
+        let onCall = false;
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        const synth = window.speechSynthesis;
+        recognition.lang = 'en-US'; 
+
+        btn.onclick = () => {
+            if (!onCall) {
+                startCall();
+            } else {
+                endCall();
+            }
+        };
+
+        function startCall() {
+            onCall = true;
+            btn.classList.replace('start-state', 'end-state');
+            icon.className = "fas fa-phone-slash";
+            label.innerText = "End Call";
+            status.innerText = "Listening...";
+            pulse.style.display = "block";
+            recognition.start();
+        }
+
+        function endCall() {
+            onCall = false;
+            btn.classList.replace('end-state', 'start-state');
+            icon.className = "fas fa-phone";
+            label.innerText = "Start Call";
+            status.innerText = "Call Ended";
+            pulse.style.display = "none";
+            recognition.stop();
+            synth.cancel();
+        }
+
+        recognition.onresult = async (event) => {
+            const transcript = event.results[0][0].transcript;
+            userText.innerText = transcript;
+            status.innerText = "Processing...";
+
+            const formData = new FormData();
+            formData.append('text', transcript);
+
+            try {
+                const response = await fetch('/chat', { method: 'POST', body: formData });
+                const data = await response.json();
+                if (data.reply) {
+                    aiText.innerText = data.reply;
+                    speak(data.reply);
+                }
+            } catch (err) {
+                status.innerText = "Error!";
+            }
+        };
+
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.onstart = () => { status.innerText = "AI Speaking..."; };
+            utterance.onend = () => { 
+                if(onCall) {
+                    status.innerText = "Listening...";
+                    recognition.start();
+                }
+            };
+            synth.speak(utterance);
+        }
+    </script>
+</body>
+</html>

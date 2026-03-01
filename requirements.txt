@@ -1,0 +1,19 @@
+# --- Core AI & LLM ---
+openai>=1.0.0          # GPT-4o বা GPT-3.5 ব্যবহারের জন্য
+langchain>=0.1.0       # ডাটা প্রসেসিং সহজ করার জন্য
+
+# --- Web Scraping ---
+requests               # ওয়েবসাইট থেকে ডাটা ফেচ করার জন্য
+beautifulsoup4         # HTML পার্স করার জন্য
+firecrawl-py           # (ঐচ্ছিক) এডভান্সড ওয়েবসাইট টু মার্কডাউন কনভার্টার
+
+# --- Voice Processing (STT & TTS) ---
+SpeechRecognition      # মাইক্রোফোন থেকে কথা শোনার জন্য
+pyttsx3                # অফলাইন টেক্সট-টু-স্পিচ (ফ্রি)
+elevenlabs             # হাই-কোয়ালিটি AI ভয়েস (পেইড কিন্তু বেস্ট)
+Deepgram-sdk           # দ্রুততম ভয়েস-টু-টেক্সট প্রসেসিং এর জন্য
+
+# --- UI & Environment ---
+streamlit              # ব্রাউজারে সুন্দর UI দেখানোর জন্য
+python-dotenv          # API Key গুলো সুরক্ষিত রাখার জন্য
+PyAudio                # মাইক্রোফোন এক্সেস করার জন্য (Windows-এ প্রয়োজন হতে পারে)
